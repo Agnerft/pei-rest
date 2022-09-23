@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	"github.com/Agnerft/pei-rest.git/database"
 	"github.com/Agnerft/pei-rest.git/models"
 	"github.com/Agnerft/pei-rest.git/routes"
 )
@@ -14,6 +15,7 @@ func main() {
 		{ID: 2, Nome: "Nome 2", Historia: "História 2"},
 	}
 
+	database.Connection()
 	fmt.Println("Iniciando o servidor Rest com Go")
 	routes.HandleRequest()
 }
