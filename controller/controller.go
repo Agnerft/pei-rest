@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/Agnerft/pei-rest.git/database"
 	"github.com/Agnerft/pei-rest.git/models"
@@ -24,11 +23,16 @@ func TodasPersonalidades(w http.ResponseWriter, r *http.Request) {
 func RetornaUmaPersonalidade(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	idParam := vars["id"]
+	var personalidade models.Personalidade
+	database.DB.First(&personalidade, idParam)
 
-	for _, personalidade := range models.Personalidades {
-		if strconv.Itoa(personalidade.ID) == idParam {
-			json.NewEncoder(w).Encode(personalidade)
-		}
-	}
+	json.NewEncoder(w).Encode(personalidade)
 
+}
+
+func CriaUmaNovaPersonalidade(w http.ResponseWriter, r *http.Request) {
+	var novaPersonalidade models.Personalidade
+	json.NewDecoder(r.Body).Decode(&novaPersonalidade)
+	//database.DB.FirstOrCreate(novaPersonalidade)
+	fmt.Println(novaPersonalidade)
 }
