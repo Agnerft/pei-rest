@@ -23,6 +23,7 @@ func TodasPersonalidades(w http.ResponseWriter, r *http.Request) {
 	var p []models.Personalidade
 	database.DB.Find(&p)
 	json.NewEncoder(w).Encode(p)
+
 }
 
 func RetornaUmaPersonalidade(w http.ResponseWriter, r *http.Request) {
@@ -40,7 +41,7 @@ func CriaUmaNovaPersonalidade(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&novaPersonalidade)
 	//json.NewEncoder(w).Encode(novaPersonalidade)
 	database.DB.Create(&novaPersonalidade)
-
+	json.NewEncoder(w).Encode(novaPersonalidade)
 	fmt.Println("Nome: " + novaPersonalidade.Nome)
 	fmt.Println("Historia: " + novaPersonalidade.Historia)
 
@@ -52,6 +53,23 @@ func DeletaUmaPersonalidade(w http.ResponseWriter, r *http.Request) {
 
 	var deletaPersonalidade models.Personalidade
 	database.DB.Delete(&deletaPersonalidade, idParam)
+	json.NewEncoder(w).Encode(&deletaPersonalidade)
 	fmt.Println("Id deletado: ", deletaPersonalidade.ID)
+
+}
+
+func EditarUmaPersonalidade(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	idParam := vars["id"]
+
+	var editaPersonaliade models.Personalidade
+
+	database.DB.First(&editaPersonaliade, idParam)
+	json.NewDecoder(r.Body).Decode(&editaPersonaliade)
+
+	database.DB.Save(&editaPersonaliade)
+
+	fmt.Print(r.Body)
+	fmt.Print("Passei aqui")
 
 }
